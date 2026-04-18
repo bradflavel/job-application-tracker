@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import type { CompanyRow } from "@/types/database";
 
+export type CompanyLink = { label: string; url: string };
+
 export const companyKeys = {
   all: ["companies"] as const,
   list: () => ["companies", "list"] as const,
@@ -18,6 +20,23 @@ export function useCompanies() {
         .order("name", { ascending: true });
       if (error) throw error;
       return (data ?? []) as CompanyRow[];
+    },
+  });
+}
+
+export function useCompany(id: string | undefined) {
+  return useQuery({
+    queryKey: id ? companyKeys.detail(id) : ["companies", "detail", "none"],
+    enabled: !!id,
+    queryFn: async (): Promise<CompanyRow | null> => {
+      if (!id) return null;
+      const { data, error } = await supabase
+        .from("companies")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+      if (error) throw error;
+      return data as CompanyRow | null;
     },
   });
 }
@@ -56,6 +75,20 @@ export function useUpdateCompany() {
         .single();
       if (error) throw error;
       return data as CompanyRow;
+    },
+    onSuccess: (row) => {
+      qc.invalidateQueries({ queryKey: companyKeys.all });
+      qc.invalidateQueries({ queryKey: companyKeys.detail(row.id) });
+    },
+  });
+}
+
+export function useDeleteCompany() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("companies").delete().eq("id", id);
+      if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: companyKeys.all }),
   });

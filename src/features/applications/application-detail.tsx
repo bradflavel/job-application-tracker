@@ -27,6 +27,9 @@ import {
 import { StatusBadge } from "./status-badge";
 import { ApplicationForm } from "./application-form";
 import { StatusHistoryList } from "./status-history-list";
+import { InterviewList } from "@/features/interviews/interview-list";
+import { OffersSection } from "@/features/offers/offers-section";
+import { ApplicationContactsSection } from "@/features/contacts/application-contacts-section";
 
 type Props = {
   id: string | null;
@@ -105,9 +108,12 @@ export function ApplicationDetail({ id, open, onOpenChange }: Props) {
               </div>
             </DialogHeader>
             <Tabs defaultValue="overview">
-              <TabsList>
+              <TabsList className="flex-wrap h-auto">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="jd">Job description</TabsTrigger>
+                <TabsTrigger value="interviews">Interviews</TabsTrigger>
+                <TabsTrigger value="contacts">Contacts</TabsTrigger>
+                <TabsTrigger value="offers">Offer</TabsTrigger>
+                <TabsTrigger value="jd">JD</TabsTrigger>
                 <TabsTrigger value="notes">Notes</TabsTrigger>
                 <TabsTrigger value="timeline">Timeline</TabsTrigger>
               </TabsList>
@@ -168,6 +174,18 @@ export function ApplicationDetail({ id, open, onOpenChange }: Props) {
                     </div>
                   </div>
                 )}
+              </TabsContent>
+              <TabsContent value="interviews">
+                <InterviewList applicationId={app.id} />
+              </TabsContent>
+              <TabsContent value="contacts">
+                <ApplicationContactsSection
+                  applicationId={app.id}
+                  companyId={app.company_id}
+                />
+              </TabsContent>
+              <TabsContent value="offers">
+                <OffersSection applicationId={app.id} />
               </TabsContent>
               <TabsContent value="jd">
                 <pre className="whitespace-pre-wrap rounded-md border bg-muted/30 p-4 text-sm">

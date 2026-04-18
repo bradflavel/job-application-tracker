@@ -63,7 +63,7 @@ export type OfferDecision = "pending" | "negotiating" | "accepted" | "rejected";
 export type ReminderKind = "follow_up" | "thank_you" | "deadline" | "custom";
 export type EmailInboxStatus = "new" | "linked" | "ignored";
 
-type Row<T> = { Row: T; Insert: Partial<T> & Record<string, unknown>; Update: Partial<T> };
+type Row<T> = { Row: T; Insert: Partial<T>; Update: Partial<T>; Relationships: [] };
 
 export interface CompanyRow {
   id: string;

@@ -30,6 +30,7 @@ import { StatusHistoryList } from "./status-history-list";
 import { InterviewList } from "@/features/interviews/interview-list";
 import { OffersSection } from "@/features/offers/offers-section";
 import { ApplicationContactsSection } from "@/features/contacts/application-contacts-section";
+import { AttachmentsSection } from "@/features/attachments/attachments-section";
 
 type Props = {
   id: string | null;
@@ -113,6 +114,7 @@ export function ApplicationDetail({ id, open, onOpenChange }: Props) {
                 <TabsTrigger value="interviews">Interviews</TabsTrigger>
                 <TabsTrigger value="contacts">Contacts</TabsTrigger>
                 <TabsTrigger value="offers">Offer</TabsTrigger>
+                <TabsTrigger value="files">Files</TabsTrigger>
                 <TabsTrigger value="jd">JD</TabsTrigger>
                 <TabsTrigger value="notes">Notes</TabsTrigger>
                 <TabsTrigger value="timeline">Timeline</TabsTrigger>
@@ -186,6 +188,9 @@ export function ApplicationDetail({ id, open, onOpenChange }: Props) {
               </TabsContent>
               <TabsContent value="offers">
                 <OffersSection applicationId={app.id} />
+              </TabsContent>
+              <TabsContent value="files">
+                <AttachmentsSection applicationId={app.id} />
               </TabsContent>
               <TabsContent value="jd">
                 <pre className="whitespace-pre-wrap rounded-md border bg-muted/30 p-4 text-sm">
